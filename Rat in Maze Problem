@@ -1,0 +1,105 @@
+#include <iostream>
+using namespace std;
+#define N 4
+
+// is safe condito=ion
+bool isSafe(int maze[N][N], int x, int y)
+{
+    if ((x >= 0 && x < N) && (y >= 0 && y < N) && maze[x][y] == 1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void printSolution(int sol[N][N]){
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < N; j++)
+        {
+            cout<<sol[i][j]<<" ";
+        }
+        cout<<endl;
+        
+    }
+    
+}
+
+bool SolveRatinMaze(int maze[N][N],int x,int y,int sol[N][N])
+{
+    //base case
+    //if (x,y is at goal) return true
+    if (x==N-1 && y==N-1 && maze[x][y]==1)
+    {
+        sol[x][y]=1;  //marked visited
+        return true;
+    }
+    //checking if maze is valid or not
+    if (isSafe(maze,x,y)==true)
+    {
+        //alreday visited
+        if (sol[x][y]==1)
+        {
+            return false;
+        }
+        sol[x][y]=1;  //inserting the value 1 for that particular x,y coordinates
+        if (SolveRatinMaze(maze,x+1,y,sol)==true)
+        {
+            return true;
+        }
+        // move left
+        if (SolveRatinMaze(maze, x - 1, y, sol) == true)
+            return true;
+        
+        if (SolveRatinMaze(maze, x, y + 1, sol) == true)
+            return true;
+        // If moving down didn't work
+        // move up
+        if (SolveRatinMaze(maze, x, y - 1, sol) == true)
+            return true;
+        
+
+        //at end point we are backtracking 
+        sol[x][y]=0;
+        return false;
+        
+    }
+    return false;
+    
+    
+
+}
+
+bool solveMaze(int maze[N][N])
+{
+    int sol[N][N] = { {0, 0, 0, 0},
+                      {0, 0, 0, 0},
+                      {0, 0, 0, 0},
+                      {0, 0, 0, 0}
+
+    };
+    if (SolveRatinMaze(maze,0,0,sol) == false)   //this will return the sol function value after the operation of the problem.
+    {
+        cout << "Solution does not exist";  
+        return false;    //solution Not Exists.
+    }
+    //Solution exists 
+    printSolution(sol);
+    return true;
+}
+
+
+
+int main()
+{
+    int maze[N][N] = {{1, 0, 0, 0},
+                      {1, 1, 0, 1},
+                      {1, 1, 0, 0},
+                      {1, 1, 1, 1}};
+    solveMaze(maze);
+
+    return 0;
+}
