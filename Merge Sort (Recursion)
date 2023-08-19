@@ -1,0 +1,68 @@
+class Solution
+{
+    public:
+    void merge(int arr[], int l, int m, int r)
+    {
+         m=(l+r)/2;
+         int len1=m-l+1;
+         int len2=r-m;
+         int *left= new int[len1];
+         int *right=new int[len2];
+         int k=l;
+         
+         //copying the left side array values here
+         for(int i=0;i<len1; i++){
+             left[i]=arr[k];
+             k++;
+         }
+         k=m+1;
+         //copying the right side array values here
+         for(int i=0;i<len2; i++){
+             right[i]=arr[k];
+             k++;
+         }
+         
+         int mainArrayIndex=l;
+         int leftArrayIndex=0;
+         int rightArrayIndex=0;
+         //copying whole array 
+         while(leftArrayIndex<len1 && rightArrayIndex<len2){
+                if(left[leftArrayIndex]<right[rightArrayIndex]){
+                    arr[mainArrayIndex]=left[leftArrayIndex];
+                    mainArrayIndex++;
+                    leftArrayIndex++;
+                }
+                else{
+                    arr[mainArrayIndex]=right[rightArrayIndex];
+                    mainArrayIndex++;
+                    rightArrayIndex++;
+                }
+                
+            }
+        while(leftArrayIndex<len1){
+            arr[mainArrayIndex++]=left[leftArrayIndex++];
+            
+        }
+        while(rightArrayIndex<len2){
+            arr[mainArrayIndex++]=right[rightArrayIndex++];
+        }
+         
+    }
+    void mergeSort(int arr[], int l, int r)
+    {
+        //base case
+        if(l>=r){
+            return ;
+        }
+        //mid
+        int m=l+(r-l)/2;
+        
+        //left part sort
+        mergeSort(arr,l,m);
+        //right part sort
+        mergeSort(arr,m+1,r);
+        
+        //merge
+        merge(arr,l,m,r);
+    }
+};
